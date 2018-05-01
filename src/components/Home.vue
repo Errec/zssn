@@ -1,8 +1,8 @@
 <template>
-  <div class="hello">
+  <div class="home container">
     <h1>{{ title }}</h1>
-    <button>Search for Survivor</button>
-    <button>Add New Survivor</button>
+    <!-- <button>Search for Survivor</button> -->
+    <button type="button" class="btn btn-dark">Add New Survivor</button>
   </div>
 </template>
 

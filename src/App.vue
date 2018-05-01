@@ -6,8 +6,13 @@
 </template>
 
 <script>
+import { survivorList } from './services/fetchAll'
+
 export default {
   name: 'App'
+  // mounted () {
+  //   survivorList()
+  // }
 }
 </script>
 
