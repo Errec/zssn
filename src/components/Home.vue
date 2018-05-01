@@ -1,8 +1,10 @@
 <template>
   <div class="home container">
+    <img class="img-fluid" src="../assets/logo.png">
     <h1>{{ title }}</h1>
-    <!-- <button>Search for Survivor</button> -->
-    <button type="button" class="btn btn-dark">Add New Survivor</button>
+    <router-link to="/add-survivor-form">
+      <button type="button" class="btn btn-dark btn-sm">Add New Survivor</button>
+    </router-link>
   </div>
 </template>
 
@@ -19,6 +21,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.home {
+  text-align: center;
+}
+h1 {
+  pointer-events: none;
+}
+a:hover {
+  text-decoration: none;
+}
 button {
   display: block;
   margin: 32px auto;
