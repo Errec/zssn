@@ -3,7 +3,7 @@
     <div class="row">
       <div class="form-group col-sm-8">
         <label for="inputName">Name</label>
-        <input type="text" class="form-control" id="inputName" aria-describedby="name" placeholder="Enter name" v-model="survivorData.name">
+        <input type="text" class="form-control" :class="{'is-invalid':inputNameValidation}" id="inputName" aria-describedby="name" placeholder="Enter name" v-model="survivorData.name">
       </div>
       <div class="form-group col-sm-2">
         <label for="inputAge">Age</label>
@@ -11,7 +11,7 @@
       </div>
       <div class="form-group col-sm-2">
         <label for="selectGender">Gender</label>
-        <select class="form-control" id="selectGender" v-model="survivorData.gender">
+        <select class="form-control" :class="{'is-invalid':inputGenderValidation}" id="selectGender" v-model="survivorData.gender">
           <option value="">Select Gender</option>
           option
           <option value="1">F</option>
@@ -23,10 +23,10 @@
     <div class="form-row" id="inputPosition">
       <button @click="getCoordinates" type="button">Get coords</button>
       <div class="col">
-        <input number class="form-control" placeholder="Latitude" v-model="survivorData.location.latitude">
+        <input number class="form-control" :class="{'is-invalid':inputCoordinateValidation}" placeholder="Latitude" v-model="survivorData.location.latitude">
       </div>
       <div class="col">
-        <input number class="form-control" placeholder="Longitude" v-model="survivorData.location.longitude">
+        <input number class="form-control" :class="{'is-invalid':inputCoordinateValidation}" placeholder="Longitude" v-model="survivorData.location.longitude">
       </div>
     </div>
     <div class="form-group d-flex">
@@ -57,6 +57,9 @@
   export default {
     data () {
       return {
+        inputNameValidation: false,
+        inputGenderValidation: false,
+        inputCoordinateValidation: false,
         survivorData: {
           name: '',
           age: '0',
@@ -93,6 +96,15 @@
         navigator.geolocation.getCurrentPosition(success, error, options)
       },
       checkForm () {
+        this.survivorData.name === '' ? this.inputNameValidation = true : this.inputNameValidation = false
+        this.survivorData.gender === '' ? this.inputGenderValidation = true : this.inputGenderValidation = false
+
+        if (!this.survivorData.location.longitude || !this.survivorData.location.latitude) {
+          this.inputCoordinateValidation = true
+        } else {
+          this.inputCoordinateValidation = false
+        }
+
         if (!this.survivorData.name ||
             !this.survivorData.gender ||
             !this.survivorData.location.longitude ||
