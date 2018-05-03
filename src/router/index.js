@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import AddSurvivorForm from '@/components/AddSurvivorForm'
+import RegisterSurvivorForm from '@/components/RegisterSurvivorForm'
 
 Vue.use(Router)
 
@@ -13,9 +13,9 @@ export default new Router({
       component: Home
     },
     {
-      path: '/add-survivor-form',
-      name: 'Add Survivor Form',
-      component: AddSurvivorForm
+      path: '/register-survivor-form',
+      name: 'Register Survivor Form',
+      component: RegisterSurvivorForm
     }
   ]
 })

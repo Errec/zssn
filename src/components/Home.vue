@@ -2,7 +2,7 @@
   <div class="home container">
     <img class="img-fluid" src="../assets/logo.png">
     <h1>{{ title }}</h1>
-    <router-link to="/add-survivor-form">
+    <router-link to="/register-survivor-form">
       <button type="button" class="btn btn-dark btn-sm">Add New Survivor</button>
     </router-link>
   </div>
@@ -19,7 +19,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .home {
   text-align: center;

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { survivorList } from './services/fetchAll'
+import { survivorList } from './services/fetchAllSurvivors'
 
 export default {
   name: 'App'
