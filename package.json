@@ -15,7 +15,8 @@
     "bootstrap-vue": "^2.0.0-rc.9",
     "vue": "^2.5.2",
     "vue-axios": "^2.1.1",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-sweetalert2": "^1.2.4"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
