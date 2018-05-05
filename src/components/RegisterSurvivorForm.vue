@@ -104,7 +104,7 @@
         function error (err) {
           vm.$swal.hideLoading()
           vm.$swal({
-            type: 'success',
+            type: 'error',
             title: `ERROR(${err.code}): ${err.message}`,
             showConfirmButton: false,
             timer: 1500

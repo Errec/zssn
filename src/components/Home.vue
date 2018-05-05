@@ -5,6 +5,9 @@
     <router-link to="/register-survivor-form">
       <button type="button" class="btn btn-dark btn-sm">Add New Survivor</button>
     </router-link>
+    <router-link to="/survivor-options">
+      <button type="button" class="btn btn-dark btn-sm">Survivor Options</button>
+    </router-link>
   </div>
 </template>
 
