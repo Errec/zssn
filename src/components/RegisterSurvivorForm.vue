@@ -14,8 +14,8 @@
         <select class="form-control" :class="{'is-invalid':inputGenderValidation}" id="selectGender" v-model="survivorData.gender">
           <option value="">Select Gender</option>
           option
-          <option value="1">F</option>
-          <option value="2">M</option>
+          <option value="F">F</option>
+          <option value="M">M</option>
         </select>
       </div>
     </div>
@@ -54,6 +54,8 @@
 </template>
 
 <script>
+  import { registerNewSurvivor } from '../services/registerNewSurvivor'
+
   export default {
     data () {
       return {
@@ -119,16 +121,10 @@
             text: 'Please fill out all fields to proceed.'
           });
         } else {
-          const survivorPostData = {
-            person: {
-              name: this.survivorData.name,
-              age: this.survivorData.age,
-              gender: this.survivorData.gender,
-              lonlat: `Point(${parseFloat(this.survivorData.location.longitude).toFixed(3)} ${parseFloat(this.survivorData.location.latitude).toFixed(3)})`,
-              items: `Water:${this.survivorData.inventory.water};Food:${this.survivorData.inventory.food};Medication:${this.survivorData.inventory.medication};Ammunition:${this.survivorData.inventory.ammunition};`
-            }
-          }
-          console.log(survivorPostData)
+
+          const survivorPostData = `person[name]=${this.survivorData.name}&person[age]=${parseInt(this.survivorData.age)}&person[gender]=${this.survivorData.gender}&person[lonlat]=Point(${parseFloat(this.survivorData.location.longitude).toFixed(3)} ${parseFloat(this.survivorData.location.latitude).toFixed(3)})&items=Water:${this.survivorData.inventory.water};Food:${this.survivorData.inventory.food};Medication:${this.survivorData.inventory.medication};Ammunition:${this.survivorData.inventory.ammunition};`
+
+          registerNewSurvivor(survivorPostData)
         }
       }
     }
