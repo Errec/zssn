@@ -82,18 +82,33 @@
     methods: {
       getCoordinates () {
         const vm = this
+        vm.$swal.showLoading()
+
         const options = {
           enableHighAccuracy: false,
           timeout: 5000,
           maximumAge: 0
         }
         function success (pos) {
+          vm.$swal.hideLoading()
+          vm.$swal({
+            type: 'success',
+            title: 'Location Updated',
+            showConfirmButton: false,
+            timer: 1000
+          })
           const crd = pos.coords
           vm.survivorData.location.latitude = crd.latitude
           vm.survivorData.location.longitude = crd.longitude
         }
         function error (err) {
-          console.warn(`ERROR(${err.code}): ${err.message}`)
+          vm.$swal.hideLoading()
+          vm.$swal({
+            type: 'success',
+            title: `ERROR(${err.code}): ${err.message}`,
+            showConfirmButton: false,
+            timer: 1500
+          })
         }
         navigator.geolocation.getCurrentPosition(success, error, options)
       },
@@ -124,7 +139,7 @@
 
           const survivorPostData = `person[name]=${this.survivorData.name}&person[age]=${parseInt(this.survivorData.age)}&person[gender]=${this.survivorData.gender}&person[lonlat]=Point(${parseFloat(this.survivorData.location.longitude).toFixed(3)} ${parseFloat(this.survivorData.location.latitude).toFixed(3)})&items=Water:${this.survivorData.inventory.water};Food:${this.survivorData.inventory.food};Medication:${this.survivorData.inventory.medication};Ammunition:${this.survivorData.inventory.ammunition};`
 
-          registerNewSurvivor(survivorPostData)
+          registerNewSurvivor(this, survivorPostData)
         }
       }
     }
