@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/Home'
-import RegisterSurvivorForm from '@/components/RegisterSurvivorForm'
-import SurvivorOptions from '@/components/SurvivorOptions'
+import Home from '@/pages/Home'
+import RegisterSurvivorForm from '@/pages/RegisterSurvivorForm'
+import SurvivorOptions from '@/pages/SurvivorOptions'
 
 Vue.use(Router)
 
