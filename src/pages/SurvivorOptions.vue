@@ -10,6 +10,13 @@
       <button type="submit" class="float-right btn btn-dark">Search</button>
     </form>
     <div v-else>
+
+      <info-table :tableData="survivorData.infos" :tableTitle="'Survivor Information'"></info-table>
+      <button type="buton" class="btn btn-dark d-block my-3" @click="updatePosition">Update Position</button>
+
+      <info-table :tableData="survivorData.items" :tableTitle="'Survivor Items'"></info-table>
+      <p class="text-right mb-5">Total Points: {{survivorData.totalPoints}}</p>
+
       <form class="container clearfix bg-light p-3 my-3 rounded border" @submit.prevent="handleReportInfectedSubmit">
         <div class="form-group">
           <label for="reportInfected">Report Infected</label>
@@ -17,11 +24,6 @@
         </div>
         <button type="submit" class="float-right btn btn-dark">Report</button>
       </form>
-
-      <button type="buton" class="btn btn-dark d-block my-3" @click="updatePosition">Update Position</button>
-
-      <info-table :tableData="survivorData.infos" :tableTitle="'Survivor Information'"></info-table>
-      <info-table :tableData="survivorData.items" :tableTitle="'Survivor Items'"></info-table>
     </div>
 
     <router-link to="/">
@@ -32,7 +34,8 @@
 
 <script>
   import InfoTable from '../components/InfoTable'
-  import { fetchSurvivorData } from '../services/fetchSurvivor'
+  import { fetchSurvivorInfos } from '../services/fetchSurvivorInfos'
+  import { fetchSurvivorItems } from '../services/fetchSurvivorItems'
   import { reportInfected } from '../services/reportInfected'
   import { patchCurrentPosition } from '../services/patchCurrentPosition'
 
@@ -57,7 +60,8 @@
             Food: 0,
             Medicine: 0,
             Ammunition: 0
-          }
+          },
+          totalPoints: 0
         }
       }
     },
@@ -68,16 +72,30 @@
         } else {
           this.$swal.showLoading()
           this.inputIdValidation = false
-          fetchSurvivorData(this.survivorId).payload.then(response => {
-            this.showOptions = true
-            this.$swal.close()
+          fetchSurvivorInfos(this.survivorId).payload.then(infosResponse => {
 
-            this.survivorData.infos.Name = response.name
-            this.survivorData.infos.ID = response.id
-            this.survivorData.infos.Age = response.age
-            this.survivorData.infos.Gender = response.gender
-            this.survivorData.infos.Position = response.lonlat || "Unknown"
+            this.survivorData.infos.Name = infosResponse.name
+            this.survivorData.infos.ID = infosResponse.id
+            this.survivorData.infos.Age = infosResponse.age
+            this.survivorData.infos.Gender = infosResponse.gender
+            this.survivorData.infos.Position = infosResponse.lonlat || "Unknown"
 
+            fetchSurvivorItems(this.survivorId).payload.then(itemsResponse => {
+              this.showOptions = true
+              this.$swal.close()
+              const vm = this
+              if (itemsResponse.length) {
+                itemsResponse.forEach((currentItem) => {
+                    vm.survivorData.items[currentItem.item.name] = currentItem.quantity
+                    vm.survivorData.totalPoints += currentItem.item.points * currentItem.quantity
+                  })
+              }
+            }).catch((err) => {
+              this.$swal({
+                type: 'error',
+                text: err
+              })
+            })
           }).catch((err) => {
             this.$swal({
               type: 'error',
