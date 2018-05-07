@@ -1,13 +1,13 @@
 <template>
   <div class="survivor-options container">
-    <h1>Survivor Options</h1>
+    <h1>Survivor Menu</h1>
 
     <form v-if="!showOptions" class="container clearfix bg-light p-3 my-3 rounded border" @submit.prevent="handleFindSurvivorSubmit">
       <div class="form-group">
-        <label for="inputId">Find Survivor</label>
+        <label for="inputId">Survivor Login</label>
         <input type="text" class="form-control" :class="{'is-invalid':inputIdValidation}" id="inputId" aria-describedby="id" placeholder="Survivor ID" v-model="survivorId">
       </div>
-      <button type="submit" class="float-right btn btn-dark">Search</button>
+      <button type="submit" class="float-right btn btn-dark">Go</button>
     </form>
     <div v-else>
 

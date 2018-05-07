@@ -6,7 +6,7 @@
       <button type="button" class="btn btn-dark btn-sm">Add New Survivor</button>
     </router-link>
     <router-link to="/survivor-options">
-      <button type="button" class="btn btn-dark btn-sm">Survivor Options</button>
+      <button type="button" class="btn btn-dark btn-sm">Survivor Menu</button>
     </router-link>
     <button type="button" @click="loadGameSummary" class="btn btn-dark btn-sm">Game Summary</button>
   </div>
