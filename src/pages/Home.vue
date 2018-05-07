@@ -8,21 +8,32 @@
     <router-link to="/survivor-options">
       <button type="button" class="btn btn-dark btn-sm">Survivor Options</button>
     </router-link>
-    <router-link to="/game-summary">
-      <button type="button" class="btn btn-dark btn-sm">Game Summary</button>
-    </router-link>
+    <!-- <router-link :to="{name: 'Game Summary', params: {summaryData: gameSummary}}"> -->
+      <button type="button" @click="loadGameSummary" class="btn btn-dark btn-sm">Game Summary</button>
+    <!-- </router-link> -->
   </div>
 </template>
 
 <script>
-export default {
-  name: 'Home',
-  data () {
-    return {
-      title: 'ZSSN'
+  import { fetchSummary } from '../services/fetchSummary'
+
+  export default {
+    name: 'Home',
+    data () {
+      return {
+        title: 'ZSSN'
+      }
+    },
+    methods: {
+      loadGameSummary () {
+        fetchSummary().payload.then(response => {
+          this.$router.push({ name: 'Game Summary', params: { summaryData: response }})
+          console.log(response[0].data)
+        }).catch((err) => {
+        })
+      }
     }
   }
-}
 </script>
 
 <style scoped>

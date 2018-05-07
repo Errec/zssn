@@ -27,6 +27,7 @@ export default new Router({
     {
       path: '/game-summary',
       name: 'Game Summary',
+      props: true,
       component: GameSummary
     }
   ]
