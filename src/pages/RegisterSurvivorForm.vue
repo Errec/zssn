@@ -85,36 +85,24 @@
     },
     methods: {
       getCoordinates () {
-        const vm = this
-        vm.$swal.showLoading()
-
-        const options = {
-          enableHighAccuracy: false,
-          timeout: 5000,
-          maximumAge: 0
-        }
-        function success (pos) {
-          vm.$swal.hideLoading()
-          vm.$swal({
+        this.$swal.showLoading()
+        this.$helpers.getCurrentCoordinates().then((position) => {
+          this.survivorData.location.latitude = position.coords.latitude
+          this.survivorData.location.longitude = position.coords.longitude
+          this.$swal({
             type: 'success',
             title: 'Location Updated',
             showConfirmButton: false,
             timer: 1000
           })
-          const crd = pos.coords
-          vm.survivorData.location.latitude = crd.latitude
-          vm.survivorData.location.longitude = crd.longitude
-        }
-        function error (err) {
-          vm.$swal.hideLoading()
-          vm.$swal({
+        }).catch((err) => {
+          this.$swal({
             type: 'error',
             title: `ERROR(${err.code}): ${err.message}`,
             showConfirmButton: false,
             timer: 1500
           })
-        }
-        navigator.geolocation.getCurrentPosition(success, error, options)
+        })
       },
       checkForm () {
         this.survivorData.name === '' ? this.inputNameValidation = true : this.inputNameValidation = false

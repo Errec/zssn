@@ -18,7 +18,7 @@
         <button type="submit" class="float-right btn btn-dark">Report</button>
       </form>
 
-      <button type="buton" class="btn btn-dark d-block my-3">Update Position</button>
+      <button type="buton" class="btn btn-dark d-block my-3" @click="updatePosition">Update Position</button>
 
       <info-table :tableData="survivorData.infos" :tableTitle="'Survivor Information'"></info-table>
       <info-table :tableData="survivorData.items" :tableTitle="'Survivor Items'"></info-table>
@@ -34,6 +34,7 @@
   import InfoTable from '../components/InfoTable'
   import { fetchSurvivorData } from '../services/fetchSurvivor'
   import { reportInfected } from '../services/reportInfected'
+  import { patchCurrentPosition } from '../services/patchCurrentPosition'
 
   export default {
     data () {
@@ -104,6 +105,38 @@
             })
           })
         }
+      },
+      updatePosition () {
+        let currentLongitude = ""
+        let currentLatitude = ""
+
+        this.$swal.showLoading()
+        this.$helpers.getCurrentCoordinates().then((position) => {
+          currentLatitude = position.coords.latitude
+          currentLongitude = position.coords.longitude
+
+          const survivorPostData = `person[name]=${this.survivorData.infos.Name}&person[age]=${parseInt(this.survivorData.infos.Age)}&person[gender]=${this.survivorData.infos.Gender}&person[lonlat]=Point(${parseFloat(currentLongitude).toFixed(3)} ${parseFloat(currentLatitude).toFixed(3)})`
+
+          patchCurrentPosition(this.survivorData.infos.ID, survivorPostData).payload.then(response => {
+            this.survivorData.infos.Position = `Point(${parseFloat(currentLongitude).toFixed(3)} ${parseFloat(currentLatitude).toFixed(3)})`
+            this.$swal({
+              type: 'success',
+              text: 'Position Updated'
+            })
+          }).catch((err) => {
+            this.$swal({
+              type: 'error',
+              text: err
+            })
+          })
+        }).catch((err) => {
+          this.$swal({
+            type: 'error',
+            title: `ERROR(${err.code}): ${err.message}`,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        })
       }
     },
     components: {

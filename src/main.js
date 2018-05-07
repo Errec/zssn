@@ -5,6 +5,7 @@ import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router'
 import VueSweetalert2 from 'vue-sweetalert2'
+import helpersPlugin from './helpers/helpersPlugin.js'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -12,6 +13,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.config.productionTip = false
 Vue.use(VueSweetalert2)
 Vue.use(BootstrapVue)
+Vue.use(helpersPlugin)
 
 /* eslint-disable no-new */
 new Vue({
