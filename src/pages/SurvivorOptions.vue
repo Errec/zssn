@@ -25,7 +25,7 @@
     </div>
 
     <router-link to="/">
-      <button type="button" class="btn btn-dark">Home</button>
+      <button type="button" class="btn btn-dark">Back</button>
     </router-link>
   </div>
 </template>
@@ -43,17 +43,17 @@
         reportInfectedValidation: false,
         survivorData: {
           infos: {
-            ID: "",
             Name: "",
+            ID: "",
             Age: "",
             Gender: "",
             Position: ""
           },
           items: {
-            Water: "",
-            Food: "",
-            Medicine: "",
-            Ammunition: ""
+            Water: 0,
+            Food: 0,
+            Medicine: 0,
+            Ammunition: 0
           }
         }
       }
@@ -63,12 +63,23 @@
         if (!this.survivorId) {
           this.inputIdValidation = true
         } else {
+          this.$swal.showLoading()
           this.inputIdValidation = false
           fetchSurvivorData(this.survivorId).payload.then(response => {
             this.showOptions = true
-            console.log(response)
+            this.$swal.close()
+
+            this.survivorData.infos.Name = response.name
+            this.survivorData.infos.ID = response.id
+            this.survivorData.infos.Age = response.age
+            this.survivorData.infos.Gender = response.gender
+            this.survivorData.infos.Position = response.lonlat || "Unknown"
+
           }).catch((err) => {
-            console.log(err)
+            this.$swal({
+              type: 'error',
+              text: err
+            })
           })
         }
       }

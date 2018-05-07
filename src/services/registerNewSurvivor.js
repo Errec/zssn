@@ -10,16 +10,14 @@ export function registerNewSurvivor (vm, survivorPostData) {
         'Accept': 'application/json'
     }
   }).then((response) => {
-      vm.$swal.hideLoading()
       vm.$swal({
         type: 'success',
         text: 'Survivor Registered With Success'
       });
     }).catch((err) => {
-      vm.$swal.hideLoading()
       vm.$swal({
         type: 'error',
         text: err
-      });
-    });
+      })
+    })
 }

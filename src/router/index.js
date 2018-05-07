@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/pages/Home'
 import RegisterSurvivorForm from '@/pages/RegisterSurvivorForm'
 import SurvivorOptions from '@/pages/SurvivorOptions'
+import GameSummary from '@/pages/GameSummary'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/survivor-options',
       name: 'Survivor Options',
       component: SurvivorOptions
+    },
+    {
+      path: '/game-summary',
+      name: 'Game Summary',
+      component: GameSummary
     }
   ]
 })

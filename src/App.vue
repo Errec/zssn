@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="container">
     <router-view/>
   </div>
 </template>
@@ -13,11 +13,16 @@ export default {
 </script>
 
 <style>
+html, body {
+  background-color: ghostwhite
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
+  max-width: 600px;
+  margin: 32px auto;
 }
 </style>
