@@ -1,8 +1,8 @@
 <template>
-  <div class="survivor-options container" @submit.prevent="handleSubmit">
+  <div class="survivor-options container">
     <h1>Survivor Options</h1>
 
-    <form v-if="!showOptions" class="container clearfix bg-light p-3 my-3 rounded border">
+    <form v-if="!showOptions" class="container clearfix bg-light p-3 my-3 rounded border" @submit.prevent="handleFindSurvivorSubmit">
       <div class="form-group">
         <label for="inputId">Find Survivor</label>
         <input type="text" class="form-control" :class="{'is-invalid':inputIdValidation}" id="inputId" aria-describedby="id" placeholder="Survivor ID" v-model="survivorId">
@@ -10,10 +10,10 @@
       <button type="submit" class="float-right btn btn-dark">Search</button>
     </form>
     <div v-else>
-      <form class="container clearfix bg-light p-3 my-3 rounded border">
+      <form class="container clearfix bg-light p-3 my-3 rounded border" @submit.prevent="handleReportInfectedSubmit">
         <div class="form-group">
           <label for="reportInfected">Report Infected</label>
-          <input type="text" class="form-control" :class="{'is-invalid':reportInfectedValidation}" id="reportInfected" aria-describedby="id" placeholder="Infected ID">
+          <input type="text" class="form-control" :class="{'is-invalid':inputInfectedIdValidation}" id="reportInfected" aria-describedby="id" placeholder="Infected ID" v-model="infectedId">
         </div>
         <button type="submit" class="float-right btn btn-dark">Report</button>
       </form>
@@ -33,14 +33,16 @@
 <script>
   import InfoTable from '../components/InfoTable'
   import { fetchSurvivorData } from '../services/fetchSurvivor'
+  import { reportInfected } from '../services/reportInfected'
 
   export default {
     data () {
       return {
         showOptions: false,
         survivorId: '',
+        infectedId: '',
         inputIdValidation: false,
-        reportInfectedValidation: false,
+        inputInfectedIdValidation: false,
         survivorData: {
           infos: {
             Name: "",
@@ -59,7 +61,7 @@
       }
     },
     methods: {
-      handleSubmit () {
+      handleFindSurvivorSubmit () {
         if (!this.survivorId) {
           this.inputIdValidation = true
         } else {
@@ -75,6 +77,26 @@
             this.survivorData.infos.Gender = response.gender
             this.survivorData.infos.Position = response.lonlat || "Unknown"
 
+          }).catch((err) => {
+            this.$swal({
+              type: 'error',
+              text: err
+            })
+          })
+        }
+      },
+      handleReportInfectedSubmit () {
+        if (!this.infectedId) {
+          this.inputInfectedIdValidation = true
+        } else {
+          this.inputInfectedIdValidation = false
+          this.$swal.showLoading()
+
+          reportInfected(this.infectedId, this.survivorData.infos.ID).payload.then(response => {
+            this.$swal({
+              type: 'success',
+              text: 'Infected Reported'
+            })
           }).catch((err) => {
             this.$swal({
               type: 'error',
