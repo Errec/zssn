@@ -8,9 +8,7 @@
     <router-link to="/survivor-options">
       <button type="button" class="btn btn-dark btn-sm">Survivor Options</button>
     </router-link>
-    <!-- <router-link :to="{name: 'Game Summary', params: {summaryData: gameSummary}}"> -->
-      <button type="button" @click="loadGameSummary" class="btn btn-dark btn-sm">Game Summary</button>
-    <!-- </router-link> -->
+    <button type="button" @click="loadGameSummary" class="btn btn-dark btn-sm">Game Summary</button>
   </div>
 </template>
 
@@ -26,10 +24,15 @@
     },
     methods: {
       loadGameSummary () {
+        this.$swal.showLoading()
         fetchSummary().payload.then(response => {
           this.$router.push({ name: 'Game Summary', params: { summaryData: response }})
-          console.log(response[0].data)
+          this.$swal.close()
         }).catch((err) => {
+          this.$swal({
+            type: 'error',
+            text: err
+          })
         })
       }
     }

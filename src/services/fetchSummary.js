@@ -10,7 +10,7 @@ export function fetchSummary () {
       axios.get(`${config.BASE_URL}/report/infected_points.json`)
     ])
     .then(axios.spread((infectedRes, nonInfectedRes, inventoryRes, pointRes) => {
-      return [infectedRes, nonInfectedRes, inventoryRes, pointRes]
+      return [infectedRes.data, nonInfectedRes.data, inventoryRes.data, pointRes.data]
     })).catch((err) => {
       return Promise.reject(err)
     })
