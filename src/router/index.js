@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/pages/Home'
 import RegisterSurvivorForm from '@/pages/RegisterSurvivorForm'
-import SurvivorOptions from '@/pages/SurvivorOptions'
+import SurvivorMenu from '@/pages/SurvivorMenu'
 import GameSummary from '@/pages/GameSummary'
 
 Vue.use(Router)
@@ -21,9 +21,9 @@ export default new Router({
       component: RegisterSurvivorForm
     },
     {
-      path: '/survivor-options',
-      name: 'Survivor Options',
-      component: SurvivorOptions
+      path: '/survivor-menu',
+      name: 'Survivor menu',
+      component: SurvivorMenu
     },
     {
       path: '/game-summary',

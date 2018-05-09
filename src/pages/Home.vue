@@ -5,7 +5,7 @@
     <router-link to="/register-survivor-form">
       <button type="button" class="btn btn-dark btn-sm"><i class="mr-2 fa fa-plus"></i>Add New Survivor</button>
     </router-link>
-    <router-link to="/survivor-options">
+    <router-link to="/survivor-menu">
       <button type="button" class="btn btn-dark btn-sm"><i class="mr-4 fa fa-bars"></i>Survivor Menu</button>
     </router-link>
     <button type="button" @click="loadGameSummary" class="btn btn-dark btn-sm"><i class="mr-2 fa fa-star"></i>Game Summary</button>
