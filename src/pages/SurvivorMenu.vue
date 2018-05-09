@@ -10,8 +10,7 @@
       <button type="submit" class="float-right btn btn-dark">Login</button>
     </form>
 
-    <!-- <div v-else> -->
-    <div>
+    <div v-else>
       <info-table :tableData="survivorData.infos" :tableTitle="'Survivor Information'"></info-table>
       <div class="w-100 clearfix mb-4">
         <button type="button" class="btn btn-dark d-block float-right" @click="updatePosition"><i class="mr-2 fa fa-lg fa-globe"></i>Update Position</button>
@@ -23,7 +22,7 @@
       <form class="container clearfix bg-light p-3 my-3 rounded border" @submit.prevent="handleFindTradeSubmit">
         <div class="form-group">
           <label for="tradeItems">Trade Items</label>
-          <input type="text" class="form-control" :class="{'is-invalid':inputTradeSurvivorIdValidation}" id="tradeItems" aria-describedby="id" placeholder="Survivor ID" v-model="tradeSurvivorId">
+          <input type="text" class="form-control" :class="{'is-invalid':inputTradeSurvivorNameValidation}" id="tradeItems" aria-describedby="id" placeholder="Survivor Name" v-model="tradeSurvivorName">
         </div>
         <button type="submit" class="btn btn-dark float-right"><i class="mr-2 fa fa-exchange"></i>Open Trade</button>
       </form>
@@ -74,9 +73,9 @@
            <b-btn size="sm" class="float-right btn-dark" variant="primary" @click="showTradeModal=false">
              Cancel
            </b-btn>
+           <b-btn :disabled="myTradePoints !== targetTradePoints || myTradePoints === 0" size="sm" class="float-right btn-dark mr-2" variant="primary" @click="makeItemTrade"><i class="fa fa-exchange"></i></b-btn>
          </div>
       </b-modal>
-
     </div>
 
     <router-link to="/">
@@ -91,6 +90,8 @@
   import { fetchSurvivorItems } from '../services/fetchSurvivorItems'
   import { reportInfected } from '../services/reportInfected'
   import { patchCurrentPosition } from '../services/patchCurrentPosition'
+  import { requestTrade } from '../services/requestTrade'
+  import { fetchAllSurvivors } from '../services/fetchAllSurvivors'
 
   export default {
     data () {
@@ -99,10 +100,11 @@
         showOptions: false,
         survivorId: '',
         tradeSurvivorId: '',
+        tradeSurvivorName: '',
         infectedId: '',
         inputIdValidation: false,
         inputInfectedIdValidation: false,
-        inputTradeSurvivorIdValidation: false,
+        inputTradeSurvivorNameValidation: false,
         survivorData: {
           infos: {
             Name: "",
@@ -201,32 +203,56 @@
         }
       },
       handleFindTradeSubmit () {
-        if (!this.tradeSurvivorId) {
-          this.inputTradeSurvivorIdValidation = true
-        } else if(this.tradeSurvivorId === this.survivorData.infos.ID) {
-          this.$swal({
-            type: 'error',
-            text: 'Recipient and Target IDs must be different'
-          })
+        // get name -> search if name -> get ID from name -> get items from ID
+        if (!this.tradeSurvivorName) {
+          this.inputTradeSurvivorNameValidation = true
         } else {
-          this.inputTradeSurvivorIdValidation = false
+          this.inputTradeSurvivorNameValidation = false
           this.$swal.showLoading()
-          fetchSurvivorItems(this.tradeSurvivorId).payload.then(tradeItemsResponse => {
-            this.$swal.close()
-            this.showTradeModal = true
-            const vm = this
-            if (tradeItemsResponse.length) {
-              tradeItemsResponse.forEach((currentItem) => {
-                  vm.tradeTargetSurvivorData.items[currentItem.item.name] = currentItem.quantity
-                  vm.tradeTargetSurvivorData.totalPoints += currentItem.item.points * currentItem.quantity
+          fetchAllSurvivors().payload.then((fetchAllResponse) => {
+
+            let survivorDataBuff
+
+            survivorDataBuff = fetchAllResponse.find((survivorData) => {
+              return survivorData.name === this.tradeSurvivorName
+            });
+
+            if (survivorDataBuff.name && !survivorDataBuff["infected?"]) {
+              this.tradeSurvivorId = survivorDataBuff.location.substr(survivorDataBuff.location.indexOf("people/") + 7)
+
+              fetchSurvivorItems(this.tradeSurvivorId).payload.then(getItemsResponse => {
+                this.$swal.close()
+                this.showTradeModal = true
+                const vm = this
+                if (getItemsResponse.length) {
+                  getItemsResponse.forEach((currentItem) => {
+                      vm.tradeTargetSurvivorData.items[currentItem.item.name] = currentItem.quantity
+                      vm.tradeTargetSurvivorData.totalPoints += currentItem.item.points * currentItem.quantity
+                    })
+                }
+              }).catch((err) => {
+                this.$swal({
+                  type: 'error',
+                  text: err
                 })
+              })
+            } else if (survivorDataBuff["infected?"]) {
+              this.$swal({
+                type: 'error',
+                text: "Survivor infected"
+              })
+            } else {
+              this.$swal({
+                type: 'error',
+                text: "Survivor not found"
+              })
             }
           }).catch((err) => {
-            this.$swal({
-              type: 'error',
-              text: err
+              this.$swal({
+                type: 'error',
+                text: err
+              })
             })
-          })
         }
       },
       updatePosition () {
@@ -260,6 +286,30 @@
             timer: 1500
           })
         })
+      },
+      makeItemTrade () {
+        const consumerPayment = `Water:${this.survivorData.trade.Water};Food:${this.survivorData.trade.Food};Medication:${this.survivorData.trade.Medication};Ammunition:${this.survivorData.trade.Ammunition};`
+        const consumerPick = `Water:${this.tradeTargetSurvivorData.trade.Water};Food:${this.tradeTargetSurvivorData.trade.Food};Medication:${this.tradeTargetSurvivorData.trade.Medication};Ammunition:${this.tradeTargetSurvivorData.trade.Ammunition};`
+        const tradeData = `consumer[name]=${this.tradeSurvivorName}&consumer[pick]=${consumerPick}&consumer[payment]=${consumerPayment}`
+
+        this.$swal.showLoading()
+        requestTrade(this.survivorId, tradeData).payload.then(tradeItemsResponse => {
+
+          this.survivorData.items.Water = this.survivorData.items.Water - this.survivorData.trade.Water + this.tradeTargetSurvivorData.trade.Water
+          this.survivorData.items.Food = this.survivorData.items.Food - this.survivorData.trade.Food + this.tradeTargetSurvivorData.trade.Food
+          this.survivorData.items.Medication = this.survivorData.items.Medication - this.survivorData.trade.Medication + this.tradeTargetSurvivorData.trade.Medication
+          this.survivorData.items.Ammunition = this.survivorData.items.Ammunition - this.survivorData.trade.Ammunition + this.tradeTargetSurvivorData.trade.Ammunition
+
+            this.$swal({
+              type: 'error',
+              text: 'Trade completed with success!'
+            })
+          }).catch((err) => {
+            this.$swal({
+              type: 'error',
+              text: err
+            })
+          })
       }
     },
     computed: {

@@ -2,10 +2,14 @@ import axios from 'axios'
 
 const config = require('./config.json');
 
-export function getSurvivorList () {
-  axios.get(`${config.BASE_URL}/people.json`).then((response) => {
-      console.log(response.data)
+export function fetchAllSurvivors () {
+  const request = axios.get(`${config.BASE_URL}/people.json`).then((response) => {
+      return response.data
     }).catch((err) => {
-      console.log(err)
-    });
+      return Promise.reject(err)
+    })
+
+    return {
+        payload: request
+    }
 }
