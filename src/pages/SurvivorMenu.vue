@@ -36,12 +36,13 @@
       </form>
 
       <b-modal v-model="showTradeModal"
+               :body-bg-variant="'light'"
                title="Trade Items">
          <b-container fluid>
            <b-row class="mb-1 text-center">
              <b-col cols="3"> </b-col>
              <b-col>You</b-col>
-             <b-col>Target</b-col>
+             <b-col>{{tradeSurvivorName}}</b-col>
            </b-row>
            <b-row class="mb-1">
              <b-col cols="3">Water</b-col>
