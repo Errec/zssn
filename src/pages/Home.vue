@@ -3,12 +3,12 @@
     <img class="img-fluid" src="../assets/logo.png">
     <h1 class="display-4">{{ title }}</h1>
     <router-link to="/register-survivor-form">
-      <button type="button" class="btn btn-dark btn-sm">Add New Survivor</button>
+      <button type="button" class="btn btn-dark btn-sm"><i class="mr-2 fa fa-plus"></i>Add New Survivor</button>
     </router-link>
     <router-link to="/survivor-options">
-      <button type="button" class="btn btn-dark btn-sm">Survivor Menu</button>
+      <button type="button" class="btn btn-dark btn-sm"><i class="mr-4 fa fa-bars"></i>Survivor Menu</button>
     </router-link>
-    <button type="button" @click="loadGameSummary" class="btn btn-dark btn-sm">Game Summary</button>
+    <button type="button" @click="loadGameSummary" class="btn btn-dark btn-sm"><i class="mr-2 fa fa-star"></i>Game Summary</button>
   </div>
 </template>
 
@@ -43,6 +43,10 @@
 .home {
   text-align: center;
 }
+img {
+  height: 250px;
+  width: auto;
+}
 h1 {
   pointer-events: none;
   text-shadow: -3px 3px grey
@@ -54,5 +58,6 @@ button {
   display: block;
   margin: 32px auto;
   cursor: pointer;
+  width: 150px
   }
 </style>

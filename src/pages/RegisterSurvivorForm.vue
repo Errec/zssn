@@ -1,7 +1,7 @@
 <template>
   <div class="register-survivor-form">
     <h1>Register New Survivor</h1>
-    <form class="survivor-form container bg-light border rounded py-3" @submit.prevent="handleSubmit">
+    <form class="clearfix survivor-form container bg-light border rounded py-3" @submit.prevent="handleSubmit">
       <div class="row">
         <div class="form-group col-sm-7">
           <label for="inputName">Name</label>
@@ -23,7 +23,7 @@
       </div>
       <label for="inputPosition">Last location (latitude, longitude)</label>
       <div class="form-row mb-4" id="inputPosition">
-        <button @click="getCoordinates" type="button">Get coords</button>
+        <button @click="getCoordinates" type="button" class="btn btn-dark"><i class="fa fa-lg fa-globe"></i></button>
         <div class="col">
           <input number class="form-control" :class="{'is-invalid':inputCoordinateValidation}" placeholder="Latitude" v-model="survivorData.location.latitude">
         </div>
@@ -48,9 +48,9 @@
         <input type="number" min="0" class="form-control" id="inputAmmunition" value="0" v-model="survivorData.inventory.ammunition">
       </div>
 
-      <button type="submit" class="btn btn-dark">Save</button>
+      <button type="submit" class="pull-right btn btn-dark"><i class="fa fa-lg fa-save"></i></button>
       <router-link to="/">
-        <button type="button" class="btn btn-dark">Cancel</button>
+        <button type="button" class="pull-right btn btn-dark mr-3">Cancel</button>
       </router-link>
     </form>
   </div>

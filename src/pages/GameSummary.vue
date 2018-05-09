@@ -35,7 +35,7 @@
       </b-card>
     </b-card-group>
     <router-link to="/">
-      <button type="button" class="btn btn-dark">Back</button>
+      <button type="button" class="btn btn-dark"><i class="fa fa-lg fa-angle-left mr-2"></i>Back</button>
     </router-link>
   </div>
 </template>

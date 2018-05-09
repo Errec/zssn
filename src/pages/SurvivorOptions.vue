@@ -4,15 +4,15 @@
 
     <form v-if="!showOptions" class="container clearfix bg-light p-3 my-3 rounded border" @submit.prevent="handleFindSurvivorSubmit">
       <div class="form-group">
-        <label for="inputId">Survivor Login</label>
+        <label for="inputId">Enter the survivor ID</label>
         <input type="text" class="form-control" :class="{'is-invalid':inputIdValidation}" id="inputId" aria-describedby="id" placeholder="Survivor ID" v-model="survivorId">
       </div>
-      <button type="submit" class="float-right btn btn-dark">Go</button>
+      <button type="submit" class="float-right btn btn-dark">Login</button>
     </form>
     <div v-else>
 
       <info-table :tableData="survivorData.infos" :tableTitle="'Survivor Information'"></info-table>
-      <button type="buton" class="btn btn-dark d-block my-3" @click="updatePosition">Update Position</button>
+      <button type="button" class="btn btn-dark d-block my-3" @click="updatePosition"><i class="mr-2 fa fa-lg fa-globe"></i>Update Position</button>
 
       <info-table :tableData="survivorData.items" :tableTitle="'Survivor Items'"></info-table>
       <p class="text-right mb-5">Total Points: {{survivorData.totalPoints}}</p>
@@ -27,7 +27,7 @@
     </div>
 
     <router-link to="/">
-      <button type="button" class="btn btn-dark">Back</button>
+      <button type="button" class="btn btn-dark"><i class="fa fa-lg fa-angle-left mr-2"></i>Back</button>
     </router-link>
   </div>
 </template>
